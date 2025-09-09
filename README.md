@@ -1,4 +1,4 @@
-# Projeto_Equipe_Magma
+# Projeto_Equipe_Magma (matchmaking)
 # Documentação UML do Projeto
 ## Diagrama de Casos de Uso
 Atores
