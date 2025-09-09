@@ -1,6 +1,6 @@
 # Projeto_Equipe_Magma
-Documentação UML do Projeto
-Diagrama de Casos de Uso
+# Documentação UML do Projeto
+## Diagrama de Casos de Uso
 Atores
 
 Player → Usuário que interage com o sistema.
@@ -23,7 +23,7 @@ Relações
 
 Uso de <<includes>> entre os casos de uso para indicar dependências funcionais.
 
-Diagrama de Classes
+## Diagrama de Classes
 Classe: rankingValidatorRepository
 
 Atributos
