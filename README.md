@@ -142,81 +142,95 @@ A arquitetura é modular e extensível, permitindo evolução futura com mínimo
 ```
 projeto_equipe_magma/
 │
-├── services/                     # Cada serviço independente
-│   ├── matchmaking_service/      # Serviço principal de matchmaking
-│   │   ├── src/
-│   │   │   ├── controllers/      # Controladores das rotas e lógica de entrada
-│   │   │   ├── usecases/         # Casos de uso (matchmaking, pairing, etc.)
-│   │   │   ├── entities/         # Entidades do domínio (Match, Player, etc.)
-│   │   │   ├── repositories/     # Interfaces de acesso a dados
-│   │   │   ├── services/         # Serviços auxiliares (fila, ranking validator)
-│   │   │   ├── dtos/             # Data Transfer Objects (comunicação entre módulos)
-│   │   │   ├── utils/            # Funções utilitárias e helpers
-│   │   │   └── main.dart|ts|py   # Ponto de entrada do serviço
-│   │   └── tests/                # Testes unitários e de integração
+├── services/                             
+│   ├── matchmaking_service/
+│   │   ├── entities/                     
+│   │   │   ├── Match.dart|ts|java
+│   │   │   ├── Player.dart|ts|java
+│   │   │   └── MatchQueue.dart|ts|java
+│   │   │
+│   │   ├── usecases/                     
+│   │   │   ├── CreateMatchUseCase.dart|ts|java
+│   │   │   ├── AddPlayerToQueueUseCase.dart|ts|java
+│   │   │   └── PairPlayersUseCase.dart|ts|java
+│   │   │
+│   │   ├── services/                     
+│   │   │   ├── RankingValidatorService.dart|ts|java
+│   │   │   ├── QueueService.dart|ts|java
+│   │   │   └── MatchmakingRulesService.dart|ts|java
+│   │   │
+│   │   ├── repositories/                 
+│   │   │   ├── MatchRepository.dart|ts|java
+│   │   │   ├── PlayerRepository.dart|ts|java
+│   │   │   └── QueueRepository.dart|ts|java
+│   │   │
+│   │   └── dtos/                       
+│   │       ├── MatchDTO.dart|ts|java
+│   │       ├── PlayerDTO.dart|ts|java
+│   │       └── QueueDTO.dart|ts|java
 │   │
-│   ├── ranking_service/          # Serviço independente de rankings
-│   │   ├── src/
-│   │   │   ├── controllers/
-│   │   │   ├── usecases/
-│   │   │   ├── entities/
-│   │   │   ├── repositories/
-│   │   │   ├── dtos/
-│   │   │   └── main.dart|ts|py
-│   │   └── tests/
+│   ├── ranking_service/
+│   │   ├── entities/
+│   │   │   └── Ranking.dart|ts|java
+│   │   ├── usecases/
+│   │   │   ├── UpdateRankingUseCase.dart|ts|java
+│   │   │   └── CalculateMMRUseCase.dart|ts|java
+│   │   ├── services/
+│   │   │   └── RankingCalculatorService.dart|ts|java
+│   │   ├── repositories/
+│   │   │   └── RankingRepository.dart|ts|java
+│   │   └── dtos/
+│   │       └── RankingDTO.dart|ts|java
 │   │
-│   ├── results_service/          # Serviço de resultados e estatísticas
-│   │   ├── src/
-│   │   │   ├── controllers/
-│   │   │   ├── usecases/
-│   │   │   ├── entities/
-│   │   │   ├── repositories/
-│   │   │   ├── dtos/
-│   │   │   └── main.dart|ts|py
-│   │   └── tests/
+│   ├── results_service/
+│   │   ├── entities/
+│   │   │   └── MatchResult.dart|ts|java
+│   │   ├── usecases/
+│   │   │   ├── SaveMatchResultUseCase.dart|ts|java
+│   │   │   └── GenerateStatisticsUseCase.dart|ts|java
+│   │   ├── services/
+│   │   │   └── StatisticsService.dart|ts|java
+│   │   ├── repositories/
+│   │   │   └── ResultsRepository.dart|ts|java
+│   │   └── dtos/
+│   │       └── MatchResultDTO.dart|ts|java
 │   │
-│   ├── user_service/             # Serviço de informações dos jogadores
-│   │   ├── src/
-│   │   │   ├── controllers/
-│   │   │   ├── usecases/
-│   │   │   ├── entities/
-│   │   │   ├── repositories/
-│   │   │   ├── dtos/
-│   │   │   └── main.dart|ts|py
-│   │   └── tests/
+│   ├── user_service/
+│   │   ├── entities/
+│   │   │   └── User.dart|ts|java
+│   │   ├── usecases/
+│   │   │   ├── GetUserInfoUseCase.dart|ts|java
+│   │   │   └── UpdateUserInfoUseCase.dart|ts|java
+│   │   ├── services/
+│   │   │   └── UserDomainService.dart|ts|java
+│   │   ├── repositories/
+│   │   │   └── UserRepository.dart|ts|java
+│   │   └── dtos/
+│   │       └── UserDTO.dart|ts|java
 │   │
-│   └── shared/                   # Recursos compartilhados entre serviços
-│       ├── database/             # Configurações e modelos de acesso ao banco
-│       ├── messaging/            # Fila, pub/sub, Kafka, RabbitMQ etc.
-│       ├── config/               # Configurações globais (env, logs, etc.)
-│       ├── utils/                # Funções utilitárias globais
-│       └── dtos/                 # Objetos de transporte compartilhados
+│   └── shared/                   
+│       ├── entities/
+│       │   └── BaseEntity.dart|ts|java
+│       ├── dtos/
+│       │   └── BaseDTO.dart|ts|java
+│       ├── services/
+│       │   └── DomainEventService.dart|ts|java
+│       ├── utils/
+│       │   └── DateUtils.dart|ts|java
+│       └── config/
+│           └── EnvironmentConfig.dart|ts|java
 │
-├── api_gateway/                  # Gateway unifica entrada de todos os serviços
-│   ├── routes/
-│   ├── middleware/
-│   ├── controllers/
-│   ├── security/                 # Autenticação, rate-limiting, JWT
-│   ├── config/
-│   └── main.dart|ts|py
-│
-├── docs/                         # Documentação UML, requisitos, diagramas
+├── docs/                       
 │   ├── UML_projeto_atualizado.drawio
-│   ├── README.md
-│   └── arquitetura_soa.md
+│   ├── arquitetura_soa.md
+│   └── README.md
 │
-├── scripts/                      # Scripts de automação, migrações e deploy
+├── tests/ 
 │
-├── tests/                        # Testes de integração geral
-│
-├── docker/                       # Configurações de containerização
-│   ├── matchmaking.Dockerfile
-│   ├── ranking.Dockerfile
-│   └── docker-compose.yml
-│
-├── .env                          # Variáveis de ambiente
 ├── .gitignore
 └── README.md
+
+
 ```
 
 # ⚙️ Explicação do Design
