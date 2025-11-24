@@ -140,83 +140,32 @@ A arquitetura é modular e extensível, permitindo evolução futura com mínimo
 # 🧱 Estrutura de Pastas — Arquitetura SOA
 
 ```
-projeto_equipe_magma/
-│
-├── services/                     # Cada serviço independente
-│   ├── matchmaking_service/      # Serviço principal de matchmaking
-│   │   ├── src/
-│   │   │   ├── controllers/      # Controladores das rotas e lógica de entrada
-│   │   │   ├── usecases/         # Casos de uso (matchmaking, pairing, etc.)
-│   │   │   ├── entities/         # Entidades do domínio (Match, Player, etc.)
-│   │   │   ├── repositories/     # Interfaces de acesso a dados
-│   │   │   ├── services/         # Serviços auxiliares (fila, ranking validator)
-│   │   │   ├── dtos/             # Data Transfer Objects (comunicação entre módulos)
-│   │   │   ├── utils/            # Funções utilitárias e helpers
-│   │   │   └── main.dart|ts|py   # Ponto de entrada do serviço
-│   │   └── tests/                # Testes unitários e de integração
-│   │
-│   ├── ranking_service/          # Serviço independente de rankings
-│   │   ├── src/
-│   │   │   ├── controllers/
-│   │   │   ├── usecases/
-│   │   │   ├── entities/
-│   │   │   ├── repositories/
-│   │   │   ├── dtos/
-│   │   │   └── main.dart|ts|py
-│   │   └── tests/
-│   │
-│   ├── results_service/          # Serviço de resultados e estatísticas
-│   │   ├── src/
-│   │   │   ├── controllers/
-│   │   │   ├── usecases/
-│   │   │   ├── entities/
-│   │   │   ├── repositories/
-│   │   │   ├── dtos/
-│   │   │   └── main.dart|ts|py
-│   │   └── tests/
-│   │
-│   ├── user_service/             # Serviço de informações dos jogadores
-│   │   ├── src/
-│   │   │   ├── controllers/
-│   │   │   ├── usecases/
-│   │   │   ├── entities/
-│   │   │   ├── repositories/
-│   │   │   ├── dtos/
-│   │   │   └── main.dart|ts|py
-│   │   └── tests/
-│   │
-│   └── shared/                   # Recursos compartilhados entre serviços
-│       ├── database/             # Configurações e modelos de acesso ao banco
-│       ├── messaging/            # Fila, pub/sub, Kafka, RabbitMQ etc.
-│       ├── config/               # Configurações globais (env, logs, etc.)
-│       ├── utils/                # Funções utilitárias globais
-│       └── dtos/                 # Objetos de transporte compartilhados
-│
-├── api_gateway/                  # Gateway unifica entrada de todos os serviços
-│   ├── routes/
-│   ├── middleware/
-│   ├── controllers/
-│   ├── security/                 # Autenticação, rate-limiting, JWT
-│   ├── config/
-│   └── main.dart|ts|py
-│
-├── docs/                         # Documentação UML, requisitos, diagramas
-│   ├── UML_projeto_atualizado.drawio
-│   ├── README.md
-│   └── arquitetura_soa.md
-│
-├── scripts/                      # Scripts de automação, migrações e deploy
-│
-├── tests/                        # Testes de integração geral
-│
-├── docker/                       # Configurações de containerização
-│   ├── matchmaking.Dockerfile
-│   ├── ranking.Dockerfile
-│   └── docker-compose.yml
-│
-├── .env                          # Variáveis de ambiente
-├── .gitignore
-└── README.md
+src/
+ ├── main/
+ │    ├── java/com/matchmaking/
+ │    │      ├── MatchmakingApiApplication.java
+ │    │      ├── config/
+ │    │      │      └── SwaggerConfig.java
+ │    │      ├── controller/
+ │    │      │      ├── MatchController.java
+ │    │      │      └── PlayerController.java
+ │    │      ├── domain/
+ │    │      │      └── Player.java
+ │    │      ├── dto/
+ │    │      │      ├── MatchRequest.java
+ │    │      │      └── MatchResponse.java
+ │    │      ├── repository/
+ │    │      │      └── PlayerRepository.java
+ │    │      ├── service/
+ │    │      │      └── MatchService.java
+ │    │      └── util/
+ │    │             └── PlayerFactory.java
+ │    └── resources/
+ │           ├── application.properties
+ │           └── schema.sql
+ └── test/
+      └── java/com/matchmaking/service/MatchServiceTest.java
+
 ```
 
 # ⚙️ Explicação do Design
