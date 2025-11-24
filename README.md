@@ -140,96 +140,31 @@ A arquitetura é modular e extensível, permitindo evolução futura com mínimo
 # 🧱 Estrutura de Pastas — Arquitetura SOA
 
 ```
-projeto_equipe_magma/
-│
-├── services/                             
-│   ├── matchmaking_service/
-│   │   ├── entities/                     
-│   │   │   ├── Match.dart|ts|java
-│   │   │   ├── Player.dart|ts|java
-│   │   │   └── MatchQueue.dart|ts|java
-│   │   │
-│   │   ├── usecases/                     
-│   │   │   ├── CreateMatchUseCase.dart|ts|java
-│   │   │   ├── AddPlayerToQueueUseCase.dart|ts|java
-│   │   │   └── PairPlayersUseCase.dart|ts|java
-│   │   │
-│   │   ├── services/                     
-│   │   │   ├── RankingValidatorService.dart|ts|java
-│   │   │   ├── QueueService.dart|ts|java
-│   │   │   └── MatchmakingRulesService.dart|ts|java
-│   │   │
-│   │   ├── repositories/                 
-│   │   │   ├── MatchRepository.dart|ts|java
-│   │   │   ├── PlayerRepository.dart|ts|java
-│   │   │   └── QueueRepository.dart|ts|java
-│   │   │
-│   │   └── dtos/                       
-│   │       ├── MatchDTO.dart|ts|java
-│   │       ├── PlayerDTO.dart|ts|java
-│   │       └── QueueDTO.dart|ts|java
-│   │
-│   ├── ranking_service/
-│   │   ├── entities/
-│   │   │   └── Ranking.dart|ts|java
-│   │   ├── usecases/
-│   │   │   ├── UpdateRankingUseCase.dart|ts|java
-│   │   │   └── CalculateMMRUseCase.dart|ts|java
-│   │   ├── services/
-│   │   │   └── RankingCalculatorService.dart|ts|java
-│   │   ├── repositories/
-│   │   │   └── RankingRepository.dart|ts|java
-│   │   └── dtos/
-│   │       └── RankingDTO.dart|ts|java
-│   │
-│   ├── results_service/
-│   │   ├── entities/
-│   │   │   └── MatchResult.dart|ts|java
-│   │   ├── usecases/
-│   │   │   ├── SaveMatchResultUseCase.dart|ts|java
-│   │   │   └── GenerateStatisticsUseCase.dart|ts|java
-│   │   ├── services/
-│   │   │   └── StatisticsService.dart|ts|java
-│   │   ├── repositories/
-│   │   │   └── ResultsRepository.dart|ts|java
-│   │   └── dtos/
-│   │       └── MatchResultDTO.dart|ts|java
-│   │
-│   ├── user_service/
-│   │   ├── entities/
-│   │   │   └── User.dart|ts|java
-│   │   ├── usecases/
-│   │   │   ├── GetUserInfoUseCase.dart|ts|java
-│   │   │   └── UpdateUserInfoUseCase.dart|ts|java
-│   │   ├── services/
-│   │   │   └── UserDomainService.dart|ts|java
-│   │   ├── repositories/
-│   │   │   └── UserRepository.dart|ts|java
-│   │   └── dtos/
-│   │       └── UserDTO.dart|ts|java
-│   │
-│   └── shared/                   
-│       ├── entities/
-│       │   └── BaseEntity.dart|ts|java
-│       ├── dtos/
-│       │   └── BaseDTO.dart|ts|java
-│       ├── services/
-│       │   └── DomainEventService.dart|ts|java
-│       ├── utils/
-│       │   └── DateUtils.dart|ts|java
-│       └── config/
-│           └── EnvironmentConfig.dart|ts|java
-│
-├── docs/                       
-│   ├── UML_projeto_atualizado.drawio
-│   ├── arquitetura_soa.md
-│   └── README.md
-│
-├── tests/ 
-│
-├── .gitignore
-└── README.md
-
+src/
+ ├── main/
+ │    ├── java/com/matchmaking/
+ │    │      ├── MatchmakingApiApplication.java
+ │    │      ├── config/
+ │    │      │      └── SwaggerConfig.java
+ │    │      ├── controller/
+ │    │      │      ├── MatchController.java
+ │    │      │      └── PlayerController.java
+ │    │      ├── domain/
+ │    │      │      └── Player.java
+ │    │      ├── dto/
+ │    │      │      ├── MatchRequest.java
+ │    │      │      └── MatchResponse.java
+ │    │      ├── repository/
+ │    │      │      └── PlayerRepository.java
+ │    │      ├── service/
+ │    │      │      └── MatchService.java
+ │    │      └── util/
+ │    │             └── PlayerFactory.java
+ │    └── resources/
+ │           ├── application.properties
+ │           └── schema.sql
+ └── test/
+      └── java/com/matchmaking/service/MatchServiceTest.java
 
 ```
 
