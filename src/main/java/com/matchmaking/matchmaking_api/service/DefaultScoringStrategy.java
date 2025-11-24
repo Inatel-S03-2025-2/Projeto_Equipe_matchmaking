@@ -2,9 +2,6 @@ package com.matchmaking.matchmaking_api.service;
 
 import org.springframework.stereotype.Component;
 
-/**
- * Default scoring: winner +20, loser -10
- */
 @Component
 public class DefaultScoringStrategy implements ScoringStrategy {
 

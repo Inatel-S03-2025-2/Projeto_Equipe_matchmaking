@@ -16,7 +16,6 @@ public class MatchResult {
     private String playerBId;
     private String playerBName;
 
-    // "A" or "B"
     private String winner;
 
     private int playerAPointsChange;
@@ -26,7 +25,6 @@ public class MatchResult {
 
     public MatchResult() {}
 
-    // getters & setters
     public Long getId() { return id; }
     public String getPlayerAId() { return playerAId; }
     public void setPlayerAId(String playerAId) { this.playerAId = playerAId; }
