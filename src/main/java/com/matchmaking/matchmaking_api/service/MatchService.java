@@ -1,68 +1,42 @@
 package com.matchmaking.matchmaking_api.service;
 
-import com.matchmaking.matchmaking_api.domain.MatchResult;
 import com.matchmaking.matchmaking_api.domain.Player;
 import com.matchmaking.matchmaking_api.dto.MatchRequest;
-import com.matchmaking.matchmaking_api.repository.MatchResultJpaRepository;
-import com.matchmaking.matchmaking_api.repository.PlayerJpaRepository;
+import com.matchmaking.matchmaking_api.dto.MatchResponse;
+import com.matchmaking.matchmaking_api.repository.PlayerRepository;
+import com.matchmaking.matchmaking_api.util.PlayerFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
 
 @Service
+@RequiredArgsConstructor
 public class MatchService {
 
-    private final PlayerFactory playerFactory;
-    private final ScoringStrategy scoringStrategy;
-    private final PlayerJpaRepository playerRepo;
-    private final MatchResultJpaRepository matchRepo;
+    private final PlayerRepository repository;
 
-    public MatchService(PlayerFactory playerFactory,
-                        ScoringStrategy scoringStrategy,
-                        PlayerJpaRepository playerRepo,
-                        MatchResultJpaRepository matchRepo) {
-        this.playerFactory = playerFactory;
-        this.scoringStrategy = scoringStrategy;
-        this.playerRepo = playerRepo;
-        this.matchRepo = matchRepo;
+    public MatchResponse registerMatch(MatchRequest req) {
+
+        Player a = repository.findById(req.getPlayerAId())
+                .orElse(PlayerFactory.create(req.getPlayerAId(), req.getPlayerAName()));
+
+        Player b = repository.findById(req.getPlayerBId())
+                .orElse(PlayerFactory.create(req.getPlayerBId(), req.getPlayerBName()));
+
+        if (req.getWinner().equalsIgnoreCase("A")) {
+            a.addWin();
+            b.addLoss();
+        } else {
+            b.addWin();
+            a.addLoss();
+        }
+
+        repository.save(a);
+        repository.save(b);
+
+        return new MatchResponse("Partida registrada com sucesso", a.getPoints(), b.getPoints());
     }
 
-    @Transactional
-    public MatchResult process(MatchRequest req) {
-        // input validation
-        if (req.getWinner() == null) throw new IllegalArgumentException("winner is required");
-
-        // fetch or create Player A
-        Player playerA = playerRepo.findById(req.getPlayerAId())
-                .orElseGet(() -> playerFactory.create(req.getPlayerAId(), req.getPlayerAName()));
-
-        // fetch or create Player B
-        Player playerB = playerRepo.findById(req.getPlayerBId())
-                .orElseGet(() -> playerFactory.create(req.getPlayerBId(), req.getPlayerBName()));
-
-        // compute deltas
-        int[] deltas = scoringStrategy.compute(req.getWinner()); // [deltaA, deltaB]
-
-        // apply deltas
-        playerA.setPoints(playerA.getPoints() + deltas[0]);
-        playerB.setPoints(playerB.getPoints() + deltas[1]);
-
-        // persist players
-        playerRepo.save(playerA);
-        playerRepo.save(playerB);
-
-        // create match result record
-        MatchResult r = new MatchResult();
-        r.setPlayerAId(playerA.getId());
-        r.setPlayerAName(playerA.getName());
-        r.setPlayerBId(playerB.getId());
-        r.setPlayerBName(playerB.getName());
-        r.setWinner(req.getWinner().trim().toUpperCase());
-        r.setPlayerAPointsChange(deltas[0]);
-        r.setPlayerBPointsChange(deltas[1]);
-        r.setTimestamp(Instant.now());
-
-        return matchRepo.save(r);
+    public java.util.List<Player> listPlayers() {
+        return repository.findAll();
     }
 }

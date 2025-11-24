@@ -1,37 +1,29 @@
 package com.matchmaking.matchmaking_api.domain;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
-@Table(name = "players")
+@Data
 public class Player {
 
     @Id
-    @Column(name = "id", length = 100)
     private String id;
 
-    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "points", nullable = false)
-    private int points;
+    private int points = 0;
 
-    public Player() {}
-
-    public Player(String id, String name, int points) {
-        this.id = id;
-        this.name = name;
-        this.points = points;
+    public void addWin() {
+        this.points += 20;
     }
 
-    // getters / setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public int getPoints() { return points; }
-    public void setPoints(int points) { this.points = points; }
+    public void addLoss() {
+        this.points -= 10;
+
+        if (this.points < 0) {
+            this.points = 0;
+        }
+    }
 }
