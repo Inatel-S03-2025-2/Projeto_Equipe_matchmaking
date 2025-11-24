@@ -187,3 +187,27 @@ HTTP/REST → Ideal para integração leve e comunicação síncrona.
 Mensageria (RabbitMQ / Kafka) → Usado para envio de eventos como partida iniciada, ranking atualizado, resultado processado.
 
 Banco compartilhado (apenas leitura) → Usado apenas para consultas conjuntas (não para escrita simultânea).
+
+# Endpoints (summary)
+
+## POST /api/v1/matchmaking/match
+- Body (application/json):
+  {
+    "playerAName": "Gab",
+    "playerAId": "p-001",
+    "playerBName": "Lucas",
+    "playerBId": "p-002",
+    "winner": "A"
+  }
+- Response:
+  {
+    "message": "Partida registrada com sucesso",
+    "playerAPoints": 20,
+    "playerBPoints": -10
+  }
+
+## GET /api/v1/matchmaking/results
+- Returns list of match results.
+
+## GET /api/v1/matchmaking/results/player/{playerId}
+- Returns matches where the player participated.
