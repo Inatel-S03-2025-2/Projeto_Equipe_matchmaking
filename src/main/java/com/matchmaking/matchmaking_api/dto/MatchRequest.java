@@ -10,5 +10,5 @@ public class MatchRequest {
     private String playerBName;
     private String playerBId;
 
-    private String winner; // "A" ou "B"
+    private String winner;
 }

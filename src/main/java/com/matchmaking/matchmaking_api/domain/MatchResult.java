@@ -16,7 +16,6 @@ public class MatchResult {
     private String playerBId;
     private String playerBName;
 
-    // "A" or "B"
     private String winner;
 
     private int playerAPointsChange;
