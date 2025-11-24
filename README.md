@@ -253,14 +253,26 @@ Mensageria (RabbitMQ / Kafka) → Usado para envio de eventos como partida inici
 
 Banco compartilhado (apenas leitura) → Usado apenas para consultas conjuntas (não para escrita simultânea).
 
-## POST /match
-```
-{
-  "playerAName": "Gabriel",
-  "playerAId": "001",
-  "playerBName": "Lucas",
-  "playerBId": "002",
-  "winner": "A"
-}
+# Endpoints (summary)
 
-```
+## POST /api/v1/matchmaking/match
+- Body (application/json):
+  {
+    "playerAName": "Gab",
+    "playerAId": "p-001",
+    "playerBName": "Lucas",
+    "playerBId": "p-002",
+    "winner": "A"
+  }
+- Response:
+  {
+    "message": "Partida registrada com sucesso",
+    "playerAPoints": 20,
+    "playerBPoints": -10
+  }
+
+## GET /api/v1/matchmaking/results
+- Returns list of match results.
+
+## GET /api/v1/matchmaking/results/player/{playerId}
+- Returns matches where the player participated.
