@@ -1,213 +1,186 @@
-# 📘 Documentação UML do Projeto
+# 📘 Documentação UML do Projeto – Matchmaking API
 ## 🎯 Diagrama de Casos de Uso
-👥 Atores
 
-Player → Usuário que interage diretamente com o sistema.
+## 👥 Atores:
 
-Players → Representa o conjunto de jogadores disponíveis no matchmaking.
+Player: Usuário que interage diretamente com o sistema.
 
-Database with Results → Repositório responsável por armazenar resultados e dados das partidas.
+Players: Conjunto de jogadores disponíveis no matchmaking.
 
-# ⚙️ Casos de Uso
-```
-| **Caso de Uso**           | **Descrição**                                                                 |
-|----------------------------|------------------------------------------------------------------------------|
-| `Match Making`             | Responsável por encontrar partidas equilibradas entre jogadores com base no ranking. |
-| `Ranking Validator`        | Valida e ajusta o ranking dos jogadores para garantir partidas justas.        |
-| `GET USER INFORMATIONS`    | Consulta informações detalhadas de um jogador.                               |
-| `Get Match Results`        | Obtém os resultados das partidas realizadas.                                 |
-| `Share Results`            | Permite compartilhar os resultados obtidos com outros serviços ou sistemas externos. |
-```
-🔗 Relações entre Casos de Uso
+Database with Results: Repositório responsável por armazenar resultados e dados das partidas.
 
-Utilização de <<includes>> para indicar dependências funcionais entre os casos de uso.
+#  ⚙️ Casos de Uso:
 
-O caso de uso Match Making inclui:
+Caso de Uso	Descrição
+Match Making	Encontra partidas equilibradas entre jogadores com base no ranking.
+Ranking Validator	Valida e ajusta o ranking dos jogadores para garantir partidas justas.
+GET USER INFORMATIONS	Consulta informações detalhadas de um jogador.
+Get Match Results	Obtém os resultados das partidas realizadas.
+Share Results	Permite compartilhar os resultados com outros serviços ou sistemas externos.
+
+# 🔗 Relações entre Casos de Uso:
+
+Match Making inclui:
 
 Ranking Validator
 
 Get User Informations
 
-O caso de uso Get Match Results depende de Database with Results.
+Get Match Results depende de Database with Results.
 
 # 🧩 Diagrama de Classes
+
 ## 🏗️ Classe: RankingValidatorRepository
 
-Atributos
+Atributos: id, resultado, ranking
 
-id
-
-resultado
-
-ranking
-
-Métodos
-
-+ iniciar()
-
-+ finalizar()
-
-+ getMatchResults()
-
-+ validarRanking()
+Métodos: iniciar(), finalizar(), getMatchResults(), validarRanking()
 
 ## 🧱 Classe: FilaDeBatalha
 
-Atributos
+Atributos: fila: List<Jogador>
 
-fila: List<Jogador>
-
-Métodos
-
-+ adicionar(id, ranking)
-
-+ remover(id)
-
-+ puxarJogador()
+Métodos: adicionar(id, ranking), remover(id), puxarJogador()
 
 ## 🧍 Classe: Jogador
 
-Atributos
+Atributos: id, ranking, estatísticas
 
-id
-
-ranking
-
-estatísticas
-
-Métodos
-
-+ participarBatalha()
-
-+ atualizarRanking(id, resultado)
+Métodos: participarBatalha(), atualizarRanking(id, resultado)
 
 ## ⚔️ Classe: BatalhaService
 
-Atributos
+Atributos: id, resultado, jogadores: List<Jogador>
 
-id
-
-resultado
-
-jogadores: List<Jogador>
-
-Métodos
-
-+ formarBatalha()
-
-+ atualizarBanco()
-
-+ compartilharResultados()
+Métodos: formarBatalha(), atualizarBanco(), compartilharResultados()
 
 ## 📊 Classe: RankingRepository
 
-Atributos
+Atributos: id, rankingAtual, historicoDePartidas
 
-id
+Métodos: atualizarRanking(), consultarRanking()
 
-rankingAtual
+## 🔁 Relações Gerais entre as Classes:
 
-historicoDePartidas
+BatalhaService usa FilaDeBatalha (use) para formar partidas.
 
-Métodos
+RankingValidatorRepository valida dados em RankingRepository.
 
-+ atualizarRanking()
+Jogador é essencial para FilaDeBatalha e BatalhaService.
 
-+ consultarRanking()
-
-## 🔁 Relações Gerais entre as Classes
-
-BatalhaService utiliza (<<use>>) FilaDeBatalha para formar partidas entre jogadores.
-
-RankingValidatorRepository realiza a validação dos dados em RankingRepository.
-
-Jogador é uma entidade essencial para FilaDeBatalha e BatalhaService.
-
-Database with Results armazena os dados processados por RankingRepository e BatalhaService.
+Database with Results armazena dados processados por RankingRepository e BatalhaService.
 
 ## 🧩 Resumo Arquitetural
 
-O sistema Matchmaking do projeto Equipe Magma tem como objetivo:
+O sistema Matchmaking tem como objetivos:
 
-Formar partidas equilibradas com base em ranking e estatísticas dos jogadores.
+Formar partidas equilibradas com base em ranking e estatísticas.
 
-Garantir a integridade e consistência das informações de ranking.
+Garantir integridade e consistência das informações.
 
 Permitir compartilhamento de resultados e integração com bases externas.
 
-A arquitetura é modular e extensível, permitindo evolução futura com mínimo acoplamento entre componentes.
+A arquitetura é modular, extensível e baseada em SOA, com mínimo acoplamento entre componentes.
 
-# 🧱 Estrutura de Pastas — Arquitetura SOA
-
+## 🧱 Estrutura de Pastas — Arquitetura SOA
 ```
-src/
- ├── main/
- │    ├── java/com/matchmaking/
- │    │      ├── MatchmakingApiApplication.java
- │    │      ├── config/
- │    │      │      └── SwaggerConfig.java
- │    │      ├── controller/
- │    │      │      ├── MatchController.java
- │    │      │      └── PlayerController.java
- │    │      ├── domain/
- │    │      │      └── Player.java
- │    │      ├── dto/
- │    │      │      ├── MatchRequest.java
- │    │      │      └── MatchResponse.java
- │    │      ├── repository/
- │    │      │      └── PlayerRepository.java
- │    │      ├── service/
- │    │      │      └── MatchService.java
- │    │      └── util/
- │    │             └── PlayerFactory.java
- │    └── resources/
- │           ├── application.properties
- │           └── schema.sql
- └── test/
-      └── java/com/matchmaking/service/MatchServiceTest.java
-
+projeto_equipe_magma/
+│
+├── services/
+│   ├── matchmaking_service/
+│   │   ├── entities/        # Match, Player, MatchQueue
+│   │   ├── usecases/        # CreateMatch, AddPlayerToQueue, PairPlayers
+│   │   ├── services/        # RankingValidatorService, QueueService, MatchmakingRulesService
+│   │   ├── repositories/    # MatchRepository, PlayerRepository, QueueRepository
+│   │   └── dtos/            # MatchDTO, PlayerDTO, QueueDTO
+│
+├── ranking_service/         # Lógica de ranking, cálculo MMR, etc.
+├── results_service/         # Processamento e armazenamento de resultados
+├── user_service/            # Informações e atualização de usuários
+├── shared/                  # Reutilizáveis: DTOs, Entities, Configs, Utils
+├── docs/                    # UML e documentação
+├── tests/                   # Testes unitários e integração
+├── .gitignore
+└── README.md
 ```
 
 # ⚙️ Explicação do Design
 ```
-| **Camada**      | **Responsabilidade**                            | **Exemplo**                                  |
-|------------------|--------------------------------------------------|----------------------------------------------|
-| `services/`      | Cada módulo isolado com sua lógica e banco       | `matchmaking_service`, `ranking_service`     |
-| `api_gateway/`   | Centraliza todas as rotas e autenticação         | `JWT`, `rate limiting`, `logging`            |
-| `shared/`        | Códigos e modelos reutilizados                   | Configurações, DTOs, utilitários             |
-| `docs/`          | Tudo sobre documentação e UML                    | Diagramas, regras de negócio                 |
-| `docker/`        | Orquestração de containers                       | Subir todos os serviços localmente           |
-| `scripts/`       | Automatizações e CI/CD                           | Build, testes, deploy                        |
+| Camada         | Responsabilidade                         | Exemplo                               |
+|----------------|-----------------------------------------|---------------------------------------|
+| services/      | Cada módulo isolado com sua lógica e banco | matchmaking_service, ranking_service |
+| shared/        | Código e modelos reutilizáveis           | Configurações, DTOs, utilitários     |
+| docs/          | Documentação UML e regras de negócio    | Diagramas, casos de uso              |
+| api_gateway/   | Centraliza rotas, autenticação e logs   | JWT, rate limiting, logging          |
+| docker/        | Orquestração de containers              | Subir todos os serviços localmente   |
+| scripts/       | Automatizações e CI/CD                   | Build, testes, deploy                |
 
 ```
-🔌 Comunicação entre Serviços
 
-HTTP/REST → Ideal para integração leve e comunicação síncrona.
+# 🔌 Comunicação entre Serviços
 
-Mensageria (RabbitMQ / Kafka) → Usado para envio de eventos como partida iniciada, ranking atualizado, resultado processado.
+HTTP/REST: integração leve e síncrona.
 
-Banco compartilhado (apenas leitura) → Usado apenas para consultas conjuntas (não para escrita simultânea).
+Mensageria (RabbitMQ/Kafka): eventos como partida iniciada ou ranking atualizado.
 
-# Endpoints (summary)
+Banco compartilhado (somente leitura): consultas conjuntas.
 
-## POST /api/v1/matchmaking/match
-- Body (application/json):
-  {
-    "playerAName": "Gab",
-    "playerAId": "p-001",
-    "playerBName": "Lucas",
-    "playerBId": "p-002",
-    "winner": "A"
-  }
-- Response:
-  {
-    "message": "Partida registrada com sucesso",
-    "playerAPoints": 20,
-    "playerBPoints": -10
-  }
+# 💡 Design Pattern Utilizado:
 
-## GET /api/v1/matchmaking/results
-- Returns list of match results.
+SOA (Service-Oriented Architecture): cada módulo é um serviço independente.
 
-## GET /api/v1/matchmaking/results/player/{playerId}
-- Returns matches where the player participated.
+DTO Pattern: separa dados de transporte de lógica de domínio.
+
+Factory Pattern (PlayerFactory) para criação de objetos Player.
+
+# 🌐 Endpoints da API
+## 📌 POST /api/matches
+### Body (JSON):
+
+```
+{
+  "playerAName": "Gab",
+  "playerAId": "1",
+  "playerBName": "Rafael",
+  "playerBId": "2",
+  "winner": "1"
+}
+
+```
+## Resposta:
+``` 
+{
+    "message": "Match registered successfully",
+    "playerAId": "1",
+    "playerBId": "2"
+}
+```
+## 📌 GET /api/matches/players
+
+### Exemplo de resposta:
+```
+[
+    {
+        "id": "1",
+        "name": "Gab"
+    },
+    {
+        "id": "2",
+        "name": "Rafael"
+    }
+]
+```
+## 📌 GET /api/matches
+
+## Exemplo de resposta:
+```
+[
+    {
+        "playerAName": "Gab",
+        "playerAId": "1",
+        "playerBName": "Rafael",
+        "playerBId": "2",
+        "winner": "1"
+    }
+]
+```
