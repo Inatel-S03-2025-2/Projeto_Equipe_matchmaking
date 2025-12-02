@@ -1,42 +1,53 @@
 package com.matchmaking.matchmaking_api.service;
 
+import com.matchmaking.matchmaking_api.domain.MatchResult;
 import com.matchmaking.matchmaking_api.domain.Player;
-import com.matchmaking.matchmaking_api.dto.MatchRequest;
-import com.matchmaking.matchmaking_api.dto.MatchResponse;
-import com.matchmaking.matchmaking_api.repository.PlayerRepository;
-import com.matchmaking.matchmaking_api.util.PlayerFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Service
-@RequiredArgsConstructor
 public class MatchService {
 
-    private final PlayerRepository repository;
+    private final List<Player> players = new ArrayList<>();
+    private final List<MatchResult> matches = new ArrayList<>();
 
-    public MatchResponse registerMatch(MatchRequest req) {
+    public MatchResult registerMatch(MatchResult matchRequest) {
 
-        Player a = repository.findById(req.getPlayerAId())
-                .orElse(PlayerFactory.create(req.getPlayerAId(), req.getPlayerAName()));
+        ensurePlayerExists(matchRequest.getPlayerAId(), matchRequest.getPlayerAName());
+        ensurePlayerExists(matchRequest.getPlayerBId(), matchRequest.getPlayerBName());
 
-        Player b = repository.findById(req.getPlayerBId())
-                .orElse(PlayerFactory.create(req.getPlayerBId(), req.getPlayerBName()));
+        matches.add(matchRequest);
 
-        if (req.getWinner().equalsIgnoreCase("A")) {
-            a.addWin();
-            b.addLoss();
-        } else {
-            b.addWin();
-            a.addLoss();
-        }
-
-        repository.save(a);
-        repository.save(b);
-
-        return new MatchResponse("Partida registrada com sucesso", a.getPoints(), b.getPoints());
+        return matchRequest;
     }
 
-    public java.util.List<Player> listPlayers() {
-        return repository.findAll();
+    public List<Player> listPlayers() {
+        return new ArrayList<>(players);
+    }
+
+    public List<MatchResult> listAllMatches() {
+        return new ArrayList<>(matches);
+    }
+
+    public List<MatchResult> listMatchesByPlayer(String playerId) {
+        List<MatchResult> result = new ArrayList<>();
+        for (MatchResult match : matches) {
+            if (match.getPlayerAId().equals(playerId) || match.getPlayerBId().equals(playerId)) {
+                result.add(match);
+            }
+        }
+        return result;
+    }
+
+    private void ensurePlayerExists(String id, String name) {
+        Optional<Player> existing = players.stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst();
+        if (existing.isEmpty()) {
+            players.add(new Player(id, name));
+        }
     }
 }

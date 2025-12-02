@@ -1,29 +1,38 @@
 package com.matchmaking.matchmaking_api.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.Data;
-
-@Entity
-@Data
 public class Player {
 
-    @Id
     private String id;
-
     private String name;
 
-    private int points = 0;
+    public Player() {}
 
-    public void addWin() {
-        this.points += 20;
+    public Player(String id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public void addLoss() {
-        this.points -= 10;
+    public String getId() {
+        return id;
+    }
 
-        if (this.points < 0) {
-            this.points = 0;
-        }
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

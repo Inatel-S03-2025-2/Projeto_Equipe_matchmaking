@@ -4,11 +4,11 @@ import com.matchmaking.matchmaking_api.domain.Player;
 
 public class PlayerFactory {
 
+    private PlayerFactory() {
+        // Evita instâncias da classe utilitária
+    }
+
     public static Player create(String id, String name) {
-        Player p = new Player();
-        p.setId(id);
-        p.setName(name);
-        p.setPoints(0);
-        return p;
+        return new Player(id, name);
     }
 }
